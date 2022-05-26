@@ -10,7 +10,7 @@
 
 Yeni Graphql Sorgusu
 
-```
+```gql
 query allPosts{
   blogposts {
     data {
@@ -24,7 +24,7 @@ query allPosts{
 
 Diğer bir örnek kullanım
 
-```
+```gql
 query allPosts{
   blogposts {
     data {
@@ -109,3 +109,48 @@ Feel free to check out the [Strapi GitHub repository](https://github.com/strapi/
 ---
 
 <sub>🤫 Psst! [Strapi is hiring](https://strapi.io/careers).</sub>
+
+## Strapi 4'te media göstermeme sorunu böyle çözüldü
+
+✨ back/config/middlewares.js
+
+``` js script
+module.exports = [
+  "strapi::errors",
+  {
+    name: "strapi::security",
+    config: {
+      contentSecurityPolicy: {
+        useDefaults: true,
+        directives: {
+          "connect-src": ["'self'", "https:"],
+          "img-src": [
+            "'self'",
+            "data:",
+            "blob:",
+            "strapi.io",
+            "dl.airtable.com",
+            "res.cloudinary.com",
+          ],
+          "media-src": [
+            "'self'",
+            "data:",
+            "blob:",
+            "dl.airtable.com",
+            "res.cloudinary.com",
+          ],
+          upgradeInsecureRequests: null,
+        },
+      },
+    },
+  },
+  "strapi::cors",
+  "strapi::poweredBy",
+  "strapi::logger",
+  "strapi::query",
+  "strapi::body",
+  "strapi::session",
+  "strapi::favicon",
+  "strapi::public",
+];
+```
